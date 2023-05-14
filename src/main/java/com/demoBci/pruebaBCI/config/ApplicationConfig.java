@@ -1,6 +1,6 @@
 package com.demoBci.pruebaBCI.config;
 
-import com.demoBci.pruebaBCI.dao.UsuarioDao;
+import com.demoBci.pruebaBCI.dao.UserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final UsuarioDao repository;
+    private final UserDao repository;
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> repository.findByEmail(username)

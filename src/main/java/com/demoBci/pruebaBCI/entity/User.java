@@ -20,7 +20,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @Builder
-public class Usuario implements UserDetails  {
+public class User implements UserDetails  {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;

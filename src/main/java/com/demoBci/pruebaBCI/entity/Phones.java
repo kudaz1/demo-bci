@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Telefonos {
+public class Phones {
     @Id
     @SequenceGenerator(
             name = "phone_sequence",

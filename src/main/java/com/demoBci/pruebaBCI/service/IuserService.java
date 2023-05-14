@@ -1,12 +1,12 @@
 package com.demoBci.pruebaBCI.service;
 
-import com.demoBci.pruebaBCI.dto.MensajeApi;
-import com.demoBci.pruebaBCI.dto.UsuariosDto;
+import com.demoBci.pruebaBCI.dto.MessageApiDto;
+import com.demoBci.pruebaBCI.dto.UserDto;
 import org.springframework.http.ResponseEntity;
 
 
 public interface IuserService {
-    ResponseEntity<MensajeApi> crear(UsuariosDto usuario);
+    ResponseEntity<MessageApiDto> create(UserDto userDto);
 
-    ResponseEntity<MensajeApi> actualizar(UsuariosDto usuario, String idUsuario, String token);
+    ResponseEntity<MessageApiDto> update(UserDto userDto, String userID, String token);
 }

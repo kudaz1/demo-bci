@@ -1,7 +1,7 @@
 package com.demoBci.pruebaBCI.controller;
 
-import com.demoBci.pruebaBCI.dto.MensajeApi;
-import com.demoBci.pruebaBCI.dto.UsuariosDto;
+import com.demoBci.pruebaBCI.dto.MessageApiDto;
+import com.demoBci.pruebaBCI.dto.UserDto;
 import com.demoBci.pruebaBCI.service.IuserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/api/v1/login")
-public class SessionUsuarioController {
+@RequestMapping(path = "/api/v1/userSession")
+public class UserSessionController {
 
     @Autowired
     IuserService iuserService;
@@ -19,9 +19,9 @@ public class SessionUsuarioController {
         return ResponseEntity.ok("Bienvenido al Sistema");
     }
 
-    @PutMapping(value = "/{idUser}/actualizar")
-    public ResponseEntity<MensajeApi> actualizarUsuario(@RequestBody UsuariosDto usuario, @PathVariable("idUser") String idUsuario, @RequestHeader(HttpHeaders.AUTHORIZATION) String token ) {
+    @PutMapping(value = "/{idUser}/update")
+    public ResponseEntity<MessageApiDto> actualizarUsuario(@RequestBody UserDto userDto, @PathVariable("idUser") String userId, @RequestHeader(HttpHeaders.AUTHORIZATION) String token ) {
 
-        return iuserService.actualizar(usuario, idUsuario, token);
+        return iuserService.update(userDto, userId, token);
     }
 }

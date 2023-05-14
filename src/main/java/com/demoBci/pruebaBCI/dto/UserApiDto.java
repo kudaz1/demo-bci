@@ -10,12 +10,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UsuarioApi extends MensajeApi{
+public class UserApiDto extends MessageApiDto {
 
     private String name;
     private String email;
     private String password;
-    private List<TelefonosDto> phones;
+    private List<PhoneDto> phones;
     private String Id;
     private Date created;
     private Date modified;

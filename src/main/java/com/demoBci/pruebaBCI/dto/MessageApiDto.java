@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class TelefonosDto {
-    private long id;
-    private String number;
-    private String citycode;
-    private String contrycode;
+public class MessageApiDto {
+    protected String message;
 }

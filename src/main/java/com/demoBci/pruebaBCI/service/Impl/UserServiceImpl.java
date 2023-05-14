@@ -1,12 +1,12 @@
 package com.demoBci.pruebaBCI.service.Impl;
 
 import com.demoBci.pruebaBCI.config.JwtService;
-import com.demoBci.pruebaBCI.dao.TelefonosDao;
-import com.demoBci.pruebaBCI.dao.UsuarioDao;
+import com.demoBci.pruebaBCI.dao.PhonesDao;
+import com.demoBci.pruebaBCI.dao.UserDao;
 import com.demoBci.pruebaBCI.dto.*;
 import com.demoBci.pruebaBCI.entity.Role;
-import com.demoBci.pruebaBCI.entity.Telefonos;
-import com.demoBci.pruebaBCI.entity.Usuario;
+import com.demoBci.pruebaBCI.entity.Phones;
+import com.demoBci.pruebaBCI.entity.User;
 import com.demoBci.pruebaBCI.service.IuserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +24,11 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class UserServiceImpl implements IuserService {
     @Autowired
-    UsuarioDao usuarioDao;
+    UserDao userDao;
     @Autowired
-    TelefonosDao telefonosDao;
+    PhonesDao phonesDao;
 
-    private final UsuarioDao repository;
+    private final UserDao repository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
@@ -38,80 +38,80 @@ public class UserServiceImpl implements IuserService {
     @Value("${email.regex.regexp}")
     private String emailRegex;
 
-    public ResponseEntity<MensajeApi> crear(UsuariosDto usuariosDto){
+    public ResponseEntity<MessageApiDto> create(UserDto userDto){
 
-        Telefonos telefonos = new Telefonos();
-        MensajeApi mensajeApi = new MensajeApi();
-        UsuarioApi usuarioApi = new UsuarioApi();
+        Phones phones = new Phones();
+        MessageApiDto messageApiDto = new MessageApiDto();
+        UserApiDto userApiDto = new UserApiDto();
 
         try {
 
-            boolean validarCorreo = ValidarEmail(usuariosDto.getEmail());
-            boolean validarPassword = ValidarContraseña(usuariosDto.getPassword());
+            boolean validateEmail = validateEmail(userDto.getEmail());
+            boolean validatePassword = validatePassword(userDto.getPassword());
 
-            if(!validarCorreo){
-                mensajeApi.setMensaje("El correo ingresado es inválido.");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensajeApi);
+            if(!validateEmail){
+                messageApiDto.setMessage("The email entered is invalid.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageApiDto);
             }
 
-            if(!validarPassword){
-                mensajeApi.setMensaje("la contraseña no tiene el formato correcto.");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensajeApi);
+            if(!validatePassword){
+                messageApiDto.setMessage("the password is not in the correct format.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageApiDto);
             }
 
-            Date fechaCreado = new Date();
+            Date createDate = new Date();
 
-            Optional<Usuario>  usuarioConsultar = usuarioDao.findByEmail(usuariosDto.getEmail());
+            Optional<User>  currentUser = userDao.findByEmail(userDto.getEmail());
 
-            if(usuarioConsultar.isPresent()){
-                mensajeApi.setMensaje("El correo ya registrado");
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(mensajeApi);
+            if(currentUser.isPresent()){
+                messageApiDto.setMessage("Email already exists");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(messageApiDto);
             }
 
-            var usuario = Usuario.builder()
-                    .name(usuariosDto.getName())
-                    .email(usuariosDto.getEmail())
-                    .password(passwordEncoder.encode(usuariosDto.getPassword()))
-                    .created(fechaCreado)
-                    .last_login(fechaCreado)
+            var user = User.builder()
+                    .name(userDto.getName())
+                    .email(userDto.getEmail())
+                    .password(passwordEncoder.encode(userDto.getPassword()))
+                    .created(createDate)
+                    .last_login(createDate)
                     .isactive(true)
                     .role(Role.ADMIN)
                     .build();
 
-            repository.save(usuario);
+            repository.save(user);
 
-            for (TelefonosDto telefono : usuariosDto.getPhones()) {
-                telefonos.setNumber(telefono.getNumber());
-                telefonos.setCitycode(telefono.getCitycode());
-                telefonos.setContrycode(telefono.getContrycode());
-                telefonos.setUserId(usuario.getId().toString());
+            for (PhoneDto telefono : userDto.getPhones()) {
+                phones.setNumber(telefono.getNumber());
+                phones.setCitycode(telefono.getCitycode());
+                phones.setContrycode(telefono.getContrycode());
+                phones.setUserId(user.getId().toString());
 
-                telefonosDao.save(telefonos);
+                phonesDao.save(phones);
             }
 
-            var jwtToken = jwtService.generateToken(usuario);
+            var jwtToken = jwtService.generateToken(user);
 
-            Optional<Usuario> usuarioBaseDatos = usuarioDao.findById(usuario.getId());
+            Optional<User> userDataBase = userDao.findById(user.getId());
 
-            Usuario usuarioToken = usuarioBaseDatos.get();
+            User userToken = userDataBase.get();
 
-            usuarioToken.setToken(jwtToken);
+            userToken.setToken(jwtToken);
 
-            repository.save(usuarioToken);
+            repository.save(userToken);
 
-            usuarioApi.setName(usuario.getName());
-            usuarioApi.setEmail(usuario.getEmail());
-            usuarioApi.setPassword(usuario.getPassword());
-            usuarioApi.setPhones(usuariosDto.getPhones());
-            usuarioApi.setId(usuario.getId().toString());
-            usuarioApi.setCreated(usuario.getCreated());
-            usuarioApi.setModified(usuario.getModified());
-            usuarioApi.setLast_login(usuario.getLast_login());
-            usuarioApi.setToken(usuarioToken.getToken());
-            usuarioApi.setIsactive(usuario.getIsactive());
-            usuarioApi.setMensaje("Usuario Creado");
+            userApiDto.setName(user.getName());
+            userApiDto.setEmail(user.getEmail());
+            userApiDto.setPassword(user.getPassword());
+            userApiDto.setPhones(userDto.getPhones());
+            userApiDto.setId(user.getId().toString());
+            userApiDto.setCreated(user.getCreated());
+            userApiDto.setModified(user.getModified());
+            userApiDto.setLast_login(user.getLast_login());
+            userApiDto.setToken(userToken.getToken());
+            userApiDto.setIsactive(user.getIsactive());
+            userApiDto.setMessage("User Created.");
 
-            return ResponseEntity.ok(usuarioApi);
+            return ResponseEntity.ok(userApiDto);
         }catch (Exception e){
             return null;
         }
@@ -121,103 +121,103 @@ public class UserServiceImpl implements IuserService {
 
 
 
-    public ResponseEntity<MensajeApi> actualizar(UsuariosDto usuariosDto, String idUsuario, String token){
+    public ResponseEntity<MessageApiDto> update(UserDto userDto, String userID, String token){
 
         try {
 
-            MensajeApi mensajeApi = new MensajeApi();
-            UsuarioApi usuarioApi = new UsuarioApi();
+            MessageApiDto messageApiDto = new MessageApiDto();
+            UserApiDto userApiDto = new UserApiDto();
 
             String tokenBearer = token.substring(7);
 
-            Date fechaModificacion = new Date();
+            Date modificationDate = new Date();
 
-            UUID uid = UUID.fromString(idUsuario);
+            UUID uid = UUID.fromString(userID);
 
-            Optional<Usuario> usuarioBaseDatos = usuarioDao.findById(uid);
+            Optional<User> userDataBase = userDao.findById(uid);
 
 
-            if(usuarioBaseDatos.isPresent()){
-                Usuario usuarioActualizado= usuarioBaseDatos.get();
+            if(userDataBase.isPresent()){
+                User currentUser = userDataBase.get();
 
-                if(!tokenBearer.equals(usuarioActualizado.getToken())) {
-                    mensajeApi.setMensaje("El token ingresado no esta autorizado.");
-                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(mensajeApi);
+                if(!tokenBearer.equals(currentUser.getToken())) {
+                    messageApiDto.setMessage("The entered token is not authorized.");
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(messageApiDto);
                 }
 
-                Optional<Usuario> correoBaseDatos = usuarioDao.findByEmail(usuariosDto.getEmail());
+                Optional<User> emailDataBase = userDao.findByEmail(userDto.getEmail());
 
-                if(correoBaseDatos.isPresent() ){
+                if(emailDataBase.isPresent() ){
 
-                    Usuario correoEncontrado = correoBaseDatos.get();
+                    User userEmailDataBase = emailDataBase.get();
 
-                    if(!Objects.equals(correoEncontrado.getId().toString(), usuarioActualizado.getId().toString())){
-                        mensajeApi.setMensaje("El correo ingresado ya se encuentra registrado.");
-                        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(mensajeApi);
+                    if(!Objects.equals(userEmailDataBase.getId().toString(), currentUser.getId().toString())){
+                        messageApiDto.setMessage("The email entered is already registered.");
+                        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(messageApiDto);
                     }
 
                 }
 
-                boolean validarCorreo = ValidarEmail(usuariosDto.getEmail());
+                boolean validateEmail = validateEmail(userDto.getEmail());
 
-                if(!validarCorreo){
-                    mensajeApi.setMensaje("El correo no tiene el formato correcto.");
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensajeApi);
+                if(!validateEmail){
+                    messageApiDto.setMessage("The email is not in the correct format.");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageApiDto);
                 }
 
-                boolean validarPassword = ValidarContraseña(usuariosDto.getPassword());
+                boolean validatePassword = validatePassword(userDto.getPassword());
 
-                if(!validarPassword){
-                    mensajeApi.setMensaje("la contraseña no tiene el formato correcto.");
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensajeApi);
+                if(!validatePassword){
+                    messageApiDto.setMessage("the password is not in the correct format.");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageApiDto);
                 }
 
-                usuarioActualizado.setName(usuariosDto.getName());
-                usuarioActualizado.setEmail(usuariosDto.getEmail());
-                usuarioActualizado.setPassword(passwordEncoder.encode(usuariosDto.getPassword()));
-                usuarioActualizado.setModified(fechaModificacion);
-                usuarioActualizado.setLast_login(fechaModificacion);
+                currentUser.setName(userDto.getName());
+                currentUser.setEmail(userDto.getEmail());
+                currentUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+                currentUser.setModified(modificationDate);
+                currentUser.setLast_login(modificationDate);
 
-                repository.save(usuarioActualizado);
+                repository.save(currentUser);
 
-                List<Telefonos> telefonosLista = telefonosDao.findByUserId(idUsuario);
+                List<Phones> phonesList = phonesDao.findByUserId(userID);
 
-                for (Telefonos telefono : telefonosLista) {
+                for (Phones phone : phonesList) {
 
-                    telefonosDao.deleteById(telefono.getId());
+                    phonesDao.deleteById(phone.getId());
                 }
 
-                Telefonos telefonos = new Telefonos();
+                Phones phones = new Phones();
 
-                for (TelefonosDto telefono : usuariosDto.getPhones()) {
-                    telefonos.setNumber(telefono.getNumber());
-                    telefonos.setCitycode(telefono.getCitycode());
-                    telefonos.setContrycode(telefono.getContrycode());
-                    telefonos.setUserId(idUsuario);
+                for (PhoneDto phone : userDto.getPhones()) {
+                    phones.setNumber(phone.getNumber());
+                    phones.setCitycode(phone.getCitycode());
+                    phones.setContrycode(phone.getContrycode());
+                    phones.setUserId(userID);
 
 
-                    telefonosDao.save(telefonos);
+                    phonesDao.save(phones);
                 }
 
-                var jwtToken = jwtService.generateToken(usuarioActualizado);
+                var jwtToken = jwtService.generateToken(currentUser);
 
-                usuarioApi.setName(usuarioActualizado.getName());
-                usuarioApi.setEmail(usuarioActualizado.getEmail());
-                usuarioApi.setPassword(usuarioActualizado.getPassword());
-                usuarioApi.setPhones(usuariosDto.getPhones());
-                usuarioApi.setId(usuarioActualizado.getId().toString());
-                usuarioApi.setCreated(usuarioActualizado.getCreated());
-                usuarioApi.setModified(usuarioActualizado.getModified());
-                usuarioApi.setLast_login(usuarioActualizado.getLast_login());
-                usuarioApi.setToken(jwtToken);
-                usuarioApi.setIsactive(usuarioActualizado.getIsactive());
-                usuarioApi.setMensaje("Usuario Actualizado");
+                userApiDto.setName(currentUser.getName());
+                userApiDto.setEmail(currentUser.getEmail());
+                userApiDto.setPassword(currentUser.getPassword());
+                userApiDto.setPhones(userDto.getPhones());
+                userApiDto.setId(currentUser.getId().toString());
+                userApiDto.setCreated(currentUser.getCreated());
+                userApiDto.setModified(currentUser.getModified());
+                userApiDto.setLast_login(currentUser.getLast_login());
+                userApiDto.setToken(jwtToken);
+                userApiDto.setIsactive(currentUser.getIsactive());
+                userApiDto.setMessage("Updated User");
 
             }else{
-                mensajeApi.setMensaje("Usuario no encontrado.");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensajeApi);
+                messageApiDto.setMessage("User not found.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageApiDto);
             }
-            return ResponseEntity.ok(usuarioApi);
+            return ResponseEntity.ok(userApiDto);
 
         }catch (Exception e) {
 
@@ -227,14 +227,14 @@ public class UserServiceImpl implements IuserService {
 
     }
 
-    public boolean ValidarEmail(String email) {
+    public boolean validateEmail(String email) {
 
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(email);
         return matcher.find();
     }
 
-    public boolean ValidarContraseña(String password) {
+    public boolean validatePassword(String password) {
 
         Pattern pattern = Pattern.compile(passwordRegex);
         Matcher matcher = pattern.matcher(password);
