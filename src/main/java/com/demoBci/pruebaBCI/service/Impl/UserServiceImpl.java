@@ -12,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,10 +29,8 @@ public class UserServiceImpl implements IuserService {
     TelefonosDao telefonosDao;
 
     private final UsuarioDao repository;
-    private final TelefonosDao repositoryTelefonos;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
 
     @Value("${password.regex.regexp}")
     private String passwordRegex;
@@ -80,7 +75,7 @@ public class UserServiceImpl implements IuserService {
                     .created(fechaCreado)
                     .last_login(fechaCreado)
                     .isactive(true)
-                    .role(Role.USER)
+                    .role(Role.ADMIN)
                     .build();
 
             repository.save(usuario);
@@ -124,25 +119,7 @@ public class UserServiceImpl implements IuserService {
 
     }
 
-    /*public MensajeApi autenticar(UsuarioAutenticar usuarioAutenticar){
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        usuarioAutenticar.getEmail(),
-                        usuarioAutenticar.getPassword()
-                )
-        );
-        var usuario = repository.findByEmail(usuarioAutenticar.getEmail())
-                .orElseThrow();
-        var jwtToken = jwtService.generateToken(usuario);
-
-        MensajeApi mensajeApi = new MensajeApi();
-
-        mensajeApi.setMensaje("Usuario Autenticado: " + jwtToken);
-
-        return mensajeApi;
-
-    }*/
 
     public ResponseEntity<MensajeApi> actualizar(UsuariosDto usuariosDto, String idUsuario, String token){
 
@@ -158,6 +135,7 @@ public class UserServiceImpl implements IuserService {
             UUID uid = UUID.fromString(idUsuario);
 
             Optional<Usuario> usuarioBaseDatos = usuarioDao.findById(uid);
+
 
             if(usuarioBaseDatos.isPresent()){
                 Usuario usuarioActualizado= usuarioBaseDatos.get();
@@ -235,6 +213,9 @@ public class UserServiceImpl implements IuserService {
                 usuarioApi.setIsactive(usuarioActualizado.getIsactive());
                 usuarioApi.setMensaje("Usuario Actualizado");
 
+            }else{
+                mensajeApi.setMensaje("Usuario no encontrado.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensajeApi);
             }
             return ResponseEntity.ok(usuarioApi);
 
