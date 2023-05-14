@@ -31,7 +31,71 @@ Crear un nuevo proyecto en Spring Boot usando Maven. Puede usar el sitio web ofi
 _Paso 2_
 
 ```
-Agregar la dependencia de JPA y H2 a su archivo pom.xml para que Maven las descargue.
+Agregar la dependencia de JPA y H2 a su archivo pom.xml para que Maven las descargue. Como tambien estamos dandole seguridad a la API y estamos generando un token, debemos agregar las siguientes dependenncias.
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+    <scope>runtime</scope>
+    <optional>true</optional>
+</dependency>
+
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <scope>runtime</scope>
+</dependency>
+
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <optional>true</optional>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-test</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-test</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-api</artifactId>
+    <version>0.11.5</version>
+</dependency>
+
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-impl</artifactId>
+    <version>0.11.5</version>
+</dependency>
+
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-jackson</artifactId>
+    <version>0.11.5</version>
+</dependency>
 ```
 
 _Paso 3_
@@ -70,27 +134,180 @@ Al usar como banco de memoria H2, no existe un script de creacion de la Base de 
 
 ## Ejecutando las pruebas ⚙️
 
-_Explica como ejecutar las pruebas automatizadas para este sistema_
+_Para desarrollar esta aplicación, se pueden seguir los siguientes pasos:_
 
-### Analice las pruebas end-to-end 🔩
+### Crear Usuario 🔩
 
-_Explica que verifican estas pruebas y por qué_
-
-```
-Da un ejemplo
-```
-
-### Y las pruebas de estilo de codificación ⌨️
-
-_Explica que verifican estas pruebas y por qué_
+_Paso 1_
 
 ```
-Da un ejemplo
+Abra Postman y cree una nueva solicitud haciendo clic en el botón "Nuevo" en la esquina superior izquierda.
 ```
 
-## Despliegue 📦
+_Paso 2_
 
-_Agrega notas adicionales sobre como hacer deploy_
+```
+Seleccione el método HTTP que desea probar (por ejemplo, POST para crear un usuario).
+```
+
+_Paso 3_
+
+```
+Ingrese la URL de la API RESTful ("http://localhost:8080/api/v1/user/create")
+```
+
+_Paso 4_
+
+```
+Seleccione la pestaña "Body" y elija "raw" como tipo de cuerpo. (En este caso el tipo es unn JSON)
+```
+
+_Paso 5_
+
+```
+
+Escriba los datos del usuario en formato JSON. Por ejemplo:
+
+{
+    "name": "Juan Rodriguez",
+    "email": "juan@rodriguez.org",
+    "password": "hunter2",
+    "phones": [
+        {
+            "number": "1234567",
+            "citycode": "1",
+            "contrycode": "57"
+        }
+    ]
+}
+
+```
+
+_Paso 6_
+
+```
+Haga clic en el botón "Send" para enviar la solicitud al servidor.
+```
+
+_Paso 7_
+
+```
+Verifique la respuesta del servidor en la sección "Response" de Postman. Si todo está bien, debería recibir un código de estado HTTP 200 (OK) y los datos del usuario creado.
+
+Ejemplo de mensaje de Respuesta del servicio
+
+{
+    "message": "User Created.",
+    "name": "carlos",
+    "email": "carlos@falabella.cl",
+    "password": "$2a$10$rZ8mtAOirwz.RUuut0dRkOJTJr2TmhNNGY8DUc6SzsP4Z8AiIM9ee",
+    "phones": [
+        {
+            "id": 0,
+            "number": "1234567",
+            "citycode": "1",
+            "contrycode": "57"
+        }
+    ],
+    "created": "2023-05-14T21:15:55.650+00:00",
+    "modified": null,
+    "last_login": "2023-05-14T21:15:55.650+00:00",
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjYXJsb3NAZmFsYWJlbGxhLmNsIiwiaWF0IjoxNjg0MDk4OTU1LCJleHAiOjE2ODQxMDAzOTV9.7s_uT9_guLEPjkek_Xw3U_BdORG7fOPDf9irx4nzILI",
+    "isactive": true,
+    "id": "74d0ef4e-d889-4d6b-ae36-7c9b933c8628"
+}
+
+```
+
+### Actualizar Usuario ⌨️
+
+_Paso 1_
+
+```
+Abra Postman y cree una nueva solicitud haciendo clic en el botón "Nuevo" en la esquina superior izquierda.
+```
+
+_Paso 2_
+
+```
+Seleccione el método HTTP que desea probar (por ejemplo, PUT para actualizar un usuario).
+```
+
+_Paso 3_
+
+```
+Ingrese la URL de la API RESTful ("http://localhost:8080/api/v1/userSession/{userID}}/update") ("Donde userId es igual al id del usuario que previamente fue creado o que este en el sistema")
+
+```
+
+_Paso 3_
+
+```
+En la pestaña de Authorization, debemos seleccionar la opcion de Bearer Token y colocar en el 
+recuadro el token el JWT token que te devolvio la API al momento de crear el usuario, 
+con esto se valida que el usuario que quiera actualizar sus datos, 
+solo pueda actualizar sus propios datos y no los de otro usuario (usuario de la session).
+
+```
+
+_Paso 4_
+
+```
+
+Escriba los datos del usuario en formato JSON. Por ejemplo:
+
+Aca mandamos los campos que deseamos actualizar.
+
+{
+    "name": "Juan Rodriguez",
+    "email": "juan@rodriguez.org",
+    "password": "hunter2",
+    "phones": [
+        {
+            "number": "1234567",
+            "citycode": "1",
+            "contrycode": "57"
+        }
+    ]
+}
+
+```
+
+_Paso 5_
+
+```
+Haga clic en el botón "Send" para enviar la solicitud al servidor.
+```
+
+_Paso 6_
+
+```
+Verifique la respuesta del servidor en la sección "Response" de Postman. Si todo está bien, debería recibir un código de estado HTTP 200 (OK) y los datos del usuario creado.
+
+Ejemplo de mensaje de Respuesta del servicio
+
+{
+    "message": "Updated User",
+    "name": "Juan Rodriguez3",
+    "email": "carlos@falabella.cl",
+    "password": "$2a$10$7tCz.FG4yWLMJMVTi/ildewmRB6VjtUxk6Ohy.B.pRy8lXxh1bwiG",
+    "phones": [
+        {
+            "id": 0,
+            "number": "1234567",
+            "citycode": "1",
+            "contrycode": "57"
+        }
+    ],
+    "created": "2023-05-14T21:15:55.650+00:00",
+    "modified": "2023-05-14T21:17:32.784+00:00",
+    "last_login": "2023-05-14T21:17:32.784+00:00",
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjYXJsb3NAZmFsYWJlbGxhLmNsIiwiaWF0IjoxNjg0MDk5MDUyLCJleHAiOjE2ODQxMDA0OTJ9.DR2ZJoDHizV81xWYswQfUHV1xnvhzbm-x6yhbPlip2U",
+    "isactive": true,
+    "id": "74d0ef4e-d889-4d6b-ae36-7c9b933c8628"
+}
+
+```
 
 ## Construido con 🛠️
 
