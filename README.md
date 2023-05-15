@@ -134,6 +134,14 @@ Al usar como banco de memoria H2, no existe un script de creacion de la Base de 
 
 ## Ejecutando las pruebas ⚙️
 
+### Colección de Postman ⌨️
+
+* [Api Creacion Ussuario para BCI](https://raw.githubusercontent.com/kudaz1/demo-bci/master/Demo-BCI.postman_collection.json) - Colección de Postman para probar la API.
+
+### Swagger ⌨️
+
+* [Demo-BCI](https://app.swaggerhub.com/apis/CARLOSCCABELLOFLORES/demo-bci/1.0.0) - Documentación en OpenAPI.
+
 _Para desarrollar esta aplicación, se pueden seguir los siguientes pasos:_
 
 ### Crear Usuario 🔩
