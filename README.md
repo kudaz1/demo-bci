@@ -309,6 +309,14 @@ Ejemplo de mensaje de Respuesta del servicio
 
 ```
 
+### Colección de Postman ⌨️
+
+* [Api Creacion Ussuario para BCI](./Demo-BCI.postman_collection.json) - Colección de Postman para probar la API.
+
+## Diagrama de Solución 🚀
+
+![Diagrama de Solución](./DiagramaSolucion.jpg)
+
 ## Construido con 🛠️
 
 _Menciona las herramientas que utilizaste para crear tu proyecto_
