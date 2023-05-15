@@ -311,7 +311,7 @@ Ejemplo de mensaje de Respuesta del servicio
 
 ### Colección de Postman ⌨️
 
-* [Api Creacion Ussuario para BCI](./Demo-BCI.postman_collection.json) - Colección de Postman para probar la API.
+* [Api Creacion Ussuario para BCI](https://raw.githubusercontent.com/kudaz1/demo-bci/master/Demo-BCI.postman_collection.json) - Colección de Postman para probar la API.
 
 ## Diagrama de Solución 🚀
 

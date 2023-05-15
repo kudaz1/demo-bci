@@ -9,16 +9,73 @@
 		{
 			"name": "Create User",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"carlos\",\r\n    \"email\": \"carlos@falabella.cl\",\r\n    \"password\": \"Hunter2!\",\r\n    \"phones\": [\r\n        {\r\n            \"number\": \"1234567\",\r\n            \"citycode\": \"1\",\r\n            \"contrycode\": \"57\"\r\n        }\r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/user/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"create"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Update User",
 			"request": {
-				"method": "GET",
-				"header": []
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjYXJsb3NAZmFsYWJlbGxhLmNsIiwiaWF0IjoxNjg0MTE2MzQzLCJleHAiOjE2ODQxMTc3ODN9.4bWo_EU2o5babAfTbld6EeHDU_I6SOAnqzMocxliJbw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Juan Rodriguez3\",\r\n    \"email\": \"carlos@falabella.cl\",\r\n    \"password\": \"Hunter2!\",\r\n    \"phones\": [\r\n        {\r\n            \"number\": \"1234567\",\r\n            \"citycode\": \"1\",\r\n            \"contrycode\": \"57\"\r\n        }\r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/userSession/08f8efc4-eb61-4f6c-aa25-c7cbd954f990/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"userSession",
+						"08f8efc4-eb61-4f6c-aa25-c7cbd954f990",
+						"update"
+					]
+				}
 			},
 			"response": []
 		}
