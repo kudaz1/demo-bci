@@ -35,7 +35,88 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "Create User - Success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"carlos\",\r\n    \"email\": \"carlos@falabella.cl\",\r\n    \"password\": \"Hunter2!\",\r\n    \"phones\": [\r\n        {\r\n            \"number\": \"1234567\",\r\n            \"citycode\": \"1\",\r\n            \"contrycode\": \"57\"\r\n        }\r\n    ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/user/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"create"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"message\": \"User Created.\",\r\n    \"name\": \"carlos\",\r\n    \"email\": \"carlos@falabella.cl\",\r\n    \"password\": \"$2a$10$EPvNunP1ZgwPecvWyydCU.6b5ZTB0zqCohHENRDbW0kq9Sc2Z25Ey\",\r\n    \"phones\": [\r\n        {\r\n            \"id\": 0,\r\n            \"number\": \"1234567\",\r\n            \"citycode\": \"1\",\r\n            \"contrycode\": \"57\"\r\n        }\r\n    ],\r\n    \"created\": \"2023-05-15T02:05:43.596+00:00\",\r\n    \"modified\": null,\r\n    \"last_login\": \"2023-05-15T02:05:43.596+00:00\",\r\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjYXJsb3NAZmFsYWJlbGxhLmNsIiwiaWF0IjoxNjg0MTE2MzQzLCJleHAiOjE2ODQxMTc3ODN9.4bWo_EU2o5babAfTbld6EeHDU_I6SOAnqzMocxliJbw\",\r\n    \"isactive\": true,\r\n    \"id\": \"08f8efc4-eb61-4f6c-aa25-c7cbd954f990\"\r\n}"
+				},
+				{
+					"name": "Create User - Error",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"carlos\",\r\n    \"email\": \"carlos@falabella.cl\",\r\n    \"password\": \"Hunter2!\",\r\n    \"phones\": [\r\n        {\r\n            \"number\": \"1234567\",\r\n            \"citycode\": \"1\",\r\n            \"contrycode\": \"57\"\r\n        }\r\n    ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/user/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"create"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\r\n    \"message\": \"Email already exists\"\r\n}"
+				}
+			]
 		},
 		{
 			"name": "Update User",
@@ -77,7 +158,96 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "Update User",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Juan Rodriguez3\",\r\n    \"email\": \"carlos@falabella.cl\",\r\n    \"password\": \"Hunter2!\",\r\n    \"phones\": [\r\n        {\r\n            \"number\": \"1234567\",\r\n            \"citycode\": \"1\",\r\n            \"contrycode\": \"57\"\r\n        }\r\n    ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/userSession/08f8efc4-eb61-4f6c-aa25-c7cbd954f990/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"userSession",
+								"08f8efc4-eb61-4f6c-aa25-c7cbd954f990",
+								"update"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"message\": \"Updated User\",\r\n    \"name\": \"Juan Rodriguez3\",\r\n    \"email\": \"carlos@falabella.cl\",\r\n    \"password\": \"$2a$10$LPBca0DPpuS1hBZny7fdQuc/iDL6V.PsEI6nCp/hZSRHkYHswbtGy\",\r\n    \"phones\": [\r\n        {\r\n            \"id\": 0,\r\n            \"number\": \"1234567\",\r\n            \"citycode\": \"1\",\r\n            \"contrycode\": \"57\"\r\n        }\r\n    ],\r\n    \"created\": \"2023-05-15T02:05:43.596+00:00\",\r\n    \"modified\": \"2023-05-15T02:07:38.240+00:00\",\r\n    \"last_login\": \"2023-05-15T02:07:38.240+00:00\",\r\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjYXJsb3NAZmFsYWJlbGxhLmNsIiwiaWF0IjoxNjg0MTE2NDU4LCJleHAiOjE2ODQxMTc4OTh9.CLAkXXdRTnaneFljNP25WxILJRtHUi--Jba4rcZaTuI\",\r\n    \"isactive\": true,\r\n    \"id\": \"08f8efc4-eb61-4f6c-aa25-c7cbd954f990\"\r\n}"
+				},
+				{
+					"name": "Update User",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Juan Rodriguez3\",\r\n    \"email\": \"carlos@falabella.cl\",\r\n    \"password\": \"Hunter2!\",\r\n    \"phones\": [\r\n        {\r\n            \"number\": \"1234567\",\r\n            \"citycode\": \"1\",\r\n            \"contrycode\": \"57\"\r\n        }\r\n    ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/userSession/08f8efc4-eb61-4f6c-aa25-c7cbd954f990/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"userSession",
+								"08f8efc4-eb61-4f6c-aa25-c7cbd954f990",
+								"update"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"message\": \"User not found.\"\r\n}"
+				}
+			]
 		}
 	]
 }
